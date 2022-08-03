@@ -18,19 +18,19 @@
         <?php
         for ($i = 0; $i <= 10; $i++) {
             echo '<div class="wrapper__bblock">
-                <div class="wrapper__block--checkbox">                
+                <div class="wrapper__bblock-checkbox">                
                 <input type="checkbox" name="sku[]" value="">
                 </div>
-                <div class="wrapper__block_item">
+                <div class="wrapper__block-item">
                 SKU
                 </div>
-                <div class="wrapper__block_item">
+                <div class="wrapper__block-item">
                 Book
                 </div>
-                <div class="wrapper__block_item">
+                <div class="wrapper__block-item">
                 20$
                 </div>
-                <div class="wrapper__block_item">
+                <div class="wrapper__block-item">
                 Size: 300 MB
                 </div>
             </div>';

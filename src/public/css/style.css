@@ -25,7 +25,7 @@
 }
 
 /* Better to use flexbox? */
-.form_item--input {
+.form__item-input {
     width: 30%;
     padding: 10px;
     border-radius: 4px;
@@ -34,7 +34,7 @@
     resize: vertical;
 }
 
-.form_item--label {
+.form__item-label {
     width: 100px;
     display: inline-block
 
@@ -42,15 +42,16 @@
 
 .error {
     --error-bottom: 2px solid red;
+    box-sizing: border-box;
     border-bottom: var(--error-bottom);
     width: 20%;
     padding-left: 6px;
     padding-bottom: 9px;
 }
 
-.none {
-    display: none;
-}
+/*.none {*/
+/*    display: none;*/
+/*}*/
 
 
 .main-header__btn {
@@ -97,14 +98,14 @@
     align-items: center;
 }
 
-.wrapper__block--checkbox {
+.wrapper__bblock-checkbox {
     box-sizing: border-box;
     text-align: left;
     margin-bottom: 10px;
 
 }
 
-.wrapper__block_item {
+.wrapper__block-item {
     box-sizing: border-box;
     margin-bottom: 4px;
 }
@@ -124,11 +125,11 @@
 
 }
 
-.form_item--hidden {
+.form__item--hidden {
     display: none;
 }
 
-.form_item {
+.form__item {
     box-sizing: border-box;
     margin-bottom: 15px;
 }

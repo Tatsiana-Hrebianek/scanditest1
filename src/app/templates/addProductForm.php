@@ -17,51 +17,51 @@
                class="main-header__btn main-header__btn--save">
     </header>
     <main class="form">
-        <div class="form_item">
-            <label class="form_item--label" for="sku">SKU</label>
-            <input class="form_item--input" type="text" id="sku" name="sku" placeholder="SKU">
+        <div class="form__item">
+            <label class="form__item-label" for="sku">SKU</label>
+            <input class="form__item-input" type="text" id="sku" name="sku" placeholder="SKU">
         </div>
-        <div class="form_item">
-            <label class="form_item--label" for="name">Name</label>
-            <input class="form_item--input" type="text" id="name" name="name" placeholder="the name of product">
+        <div class="form__item">
+            <label class="form__item-label" for="name">Name</label>
+            <input class="form__item-input" type="text" id="name" name="name" placeholder="the name of product">
         </div>
-        <div class="form_item">
-            <label class="form_item--label" for="price">Price, $</label>
-            <input class="form_item--input" type="text" id="price" name="price" placeholder="price">
+        <div class="form__item">
+            <label class="form__item-label" for="price">Price, $</label>
+            <input class="form__item-input" type="text" id="price" name="price" placeholder="price">
         </div>
-        <div class="form_item">
-            <label class="form_item--label">Type Switcher</label>
-            <select name="type" id="productType" class="required form_item--input">
+        <div class="form__item">
+            <label class="form__item-label">Type Switcher</label>
+            <select name="type" id="productType" class="required form__item-input">
                 <option value="" hidden>Type Switcher</option>
                 <option value="Disc">DVD</option>
                 <option value="Book">Book</option>
                 <option value="Furniture">Furniture</option>
             </select>
         </div>
-        <div id="Disc" class="data form_item form_item--hidden">
-            <label class="form_item--label">Size (MB) </label>
-            <input class="form_item--input" type="text" id="size" name="size" placeholder="size">
+        <div id="Disc" class="data form__item form__item--hidden">
+            <label class="form__item-label">Size (MB) </label>
+            <input class="form__item-input" type="text" id="size" name="size" placeholder="size">
             <p>Please, provide disc space in MB</p>
         </div>
-        <div id="Furniture" class="data form_item form_item--hidden">
-            <div class="form_item">
-                <label class="form_item--label">Height (CM) </label>
-                <input class="form_item--input" type="text" id="height" name="height" placeholder="height">
+        <div id="Furniture" class="data form__item form__item--hidden">
+            <div class="form__item">
+                <label class="form__item-label">Height (CM) </label>
+                <input class="form__item-input" type="text" id="height" name="height" placeholder="height">
             </div>
-            <div class="form_item">
-                <label class="form_item--label">Width (CM) </label>
-                <input class="form_item--input" type="text" id='width' name="width" placeholder="width">
+            <div class="form__item">
+                <label class="form__item-label">Width (CM) </label>
+                <input class="form__item-input" type="text" id='width' name="width" placeholder="width">
             </div>
-            <div class="form_item">
-                <label class="form_item--label">Length (CM) </label>
-                <input class="form_item--input" type="text" id="length" name="length" placeholder="length">
+            <div class="form__item">
+                <label class="form__item-label">Length (CM) </label>
+                <input class="form__item-input" type="text" id="length" name="length" placeholder="length">
                 <div>Please, provide furniture height, width, length in CM</div>
             </div>
         </div>
-        <div id="Book" class="data form_item form_item--hidden">
-            <div class="form_item">
-                <label class="form_item--label">Weight (KG) </label>
-                <input class="form_item--input" type="text" id='weight' name="weight" placeholder="weight">
+        <div id="Book" class="data form__item form__item--hidden">
+            <div class="form__item">
+                <label class="form__item-label">Weight (KG) </label>
+                <input class="form__item-input" type="text" id='weight' name="weight" placeholder="weight">
                 <div>Please, provide book weight in KG</div>
             </div>
         </div>
