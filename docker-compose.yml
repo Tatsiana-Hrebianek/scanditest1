@@ -1,0 +1,48 @@
+services:
+  web:
+    build:
+      dockerfile: docker/nginx/Dockerfile
+      context: .
+    networks:
+      - app
+    ports:
+      - 80:80
+    depends_on:
+      - php
+    tty: true
+    volumes:
+      - ./src:/var/www
+
+  php:
+    build:
+      dockerfile: docker/php/Dockerfile
+      context: .
+    networks:
+      - app
+    ports:
+      - 9000:9000
+    tty: true
+    volumes:
+      - ./src:/var/www
+
+  db:
+    build:
+      dockerfile: docker/mysql/Dockerfile
+      context: .
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - app
+    environment:
+      - MYSQL_DATABASE=scandi
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  db:

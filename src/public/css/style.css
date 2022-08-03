@@ -1,0 +1,144 @@
+.wrapper__bblock {
+    box-sizing: border-box;
+    line-height: 20px;
+    font-size: 18px;
+    background: #d5ebe8;
+    color: black;
+    width: 180px;
+    height: 150px;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid black;
+
+}
+
+
+.wrapper {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2em;
+    justify-items: center;
+    padding-top: 20px;
+
+}
+
+/* Better to use flexbox? */
+.form_item--input {
+    width: 30%;
+    padding: 10px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    resize: vertical;
+}
+
+.form_item--label {
+    width: 100px;
+    display: inline-block
+
+}
+
+.error {
+    --error-bottom: 2px solid red;
+    border-bottom: var(--error-bottom);
+    width: 20%;
+    padding-left: 6px;
+    padding-bottom: 9px;
+}
+
+.none {
+    display: none;
+}
+
+
+.main-header__btn {
+    --background-button: #EFEFEF;
+    --button-text-color: black;
+    flex-basis: 5%;
+    box-sizing: border-box;
+    background: var(--background-button);
+    color: var(--button-text-color);
+    height: 35px;
+    text-decoration: none;
+    border-radius: 3px;
+    border: 1px solid;
+    margin-bottom: 10px;
+    font-family: "Bitstream Charter";
+    font-size: 14px;
+    text-align: center;
+}
+
+.main-header__btn--cancel {
+    padding: 7px 2px;
+    box-sizing: border-box;
+}
+
+.main-header__btn--save {
+
+}
+
+
+.main-header__title {
+    flex-basis: 90%;
+    justify-content: flex-start;
+    font-size: 30px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+}
+
+.main-header {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+    border-bottom: solid 1px black;
+    align-items: center;
+}
+
+.wrapper__block--checkbox {
+    box-sizing: border-box;
+    text-align: left;
+    margin-bottom: 10px;
+
+}
+
+.wrapper__block_item {
+    box-sizing: border-box;
+    margin-bottom: 4px;
+}
+
+.form {
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+.main-footer__bottom-text {
+    box-sizing: border-box;
+    margin-top: 30px;
+    border-top: 1px solid black;
+    text-align: center;
+    font-size: 15px;
+    padding-top: 20px;
+
+}
+
+.form_item--hidden {
+    display: none;
+}
+
+.form_item {
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.main-header__btn--add {
+    padding: 7px 2px;
+    box-sizing: border-box;
+}
+
+.main-header__btn--delete {
+
+}
+
