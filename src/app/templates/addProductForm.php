@@ -35,20 +35,20 @@
             <span class="error" aria-live="polite"></span>
         </div>
         <div class="form__item">
-            <label class="form__item-label">Type Switcher</label>
-            <select name="type" id="productType" class="required form__item-input" required>
+            <label class="form__item-label" for="productType">Type Switcher</label>
+            <select name="type" id="type" class="form__item-input" required>
                 <option value="" hidden>Type Switcher</option>
-                <option value="Disc">DVD</option>
+                <option value="Disk">DVD</option>
                 <option value="Book">Book</option>
                 <option value="Furniture">Furniture</option>
             </select>
             <span class="error" aria-live="polite"></span>
         </div>
-        <div id="Disc" class="data form__item form__item--hidden">
+        <div id="Disk" class="data form__item form__item--hidden">
             <label class="form__item-label">Size (MB) </label>
             <input class="form__item-input" type="text" id="size" name="size" placeholder="size">
             <span class="error" aria-live="polite"></span>
-            <p>Please, provide disc space in MB</p>
+            <p>Please, provide disk space in MB</p>
 
         </div>
         <div id="Furniture" class="data form__item form__item--hidden">
@@ -82,7 +82,8 @@
 <footer class="main-footer__bottom-text">
     <div>Scandiweb Test assignment</div>
 </footer>
-<script src='/js/myscript.js'></script>
+<!--<script src='/js/myscript.js'></script>-->
+<script src='/js/Validation.js'></script>
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 <!--<script type="text/javascript"-->
