@@ -1,5 +1,9 @@
-.wrapper__bblock {
+* {
     box-sizing: border-box;
+}
+
+
+.wrapper__bblock {
     line-height: 20px;
     font-size: 18px;
     background: #d5ebe8;
@@ -15,7 +19,6 @@
 
 
 .wrapper {
-    box-sizing: border-box;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 2em;
@@ -29,7 +32,6 @@
     width: 30%;
     padding: 10px;
     border-radius: 4px;
-    box-sizing: border-box;
     margin-top: 6px;
     resize: vertical;
 }
@@ -41,24 +43,20 @@
 }
 
 .error {
-    --error-bottom: 2px solid red;
-    box-sizing: border-box;
-    border-bottom: var(--error-bottom);
-    width: 20%;
-    padding-left: 6px;
-    padding-bottom: 9px;
+
+    width: 100%;
+    padding: 0;
+
+    font-size: 80%;
+    color: white;
+    background-color: #900;
+    border-radius: 0 0 5px 5px;
 }
-
-/*.none {*/
-/*    display: none;*/
-/*}*/
-
 
 .main-header__btn {
     --background-button: #EFEFEF;
     --button-text-color: black;
     flex-basis: 5%;
-    box-sizing: border-box;
     background: var(--background-button);
     color: var(--button-text-color);
     height: 35px;
@@ -73,7 +71,6 @@
 
 .main-header__btn--cancel {
     padding: 7px 2px;
-    box-sizing: border-box;
 }
 
 .main-header__btn--save {
@@ -90,7 +87,6 @@
 }
 
 .main-header {
-    box-sizing: border-box;
     display: flex;
     justify-content: flex-end;
     gap: 1em;
@@ -99,24 +95,19 @@
 }
 
 .wrapper__bblock-checkbox {
-    box-sizing: border-box;
     text-align: left;
     margin-bottom: 10px;
-
 }
 
 .wrapper__block-item {
-    box-sizing: border-box;
     margin-bottom: 4px;
 }
 
 .form {
-    box-sizing: border-box;
     margin-top: 20px;
 }
 
 .main-footer__bottom-text {
-    box-sizing: border-box;
     margin-top: 30px;
     border-top: 1px solid black;
     text-align: center;
@@ -130,13 +121,11 @@
 }
 
 .form__item {
-    box-sizing: border-box;
     margin-bottom: 15px;
 }
 
 .main-header__btn--add {
     padding: 7px 2px;
-    box-sizing: border-box;
 }
 
 .main-header__btn--delete {
