@@ -1,203 +1,233 @@
 class Validator {
+    errormessage = new Map();
+
     disk = document.getElementById("Disk");
     book = document.getElementById("Book");
     furniture = document.getElementById("Furniture");
+    selector = document.getElementById("type");
 
-    constructor() {
-        this.sku = document.getElementById("sku");
-        this.name = document.getElementById("name");
-        this.price = document.getElementById("price");
-        this.selector = document.getElementById("type");
-        this.size = document.getElementById("size");
-        this.weight = document.getElementById("weight");
-        this.height = document.getElementById("height");
-        this.width = document.getElementById("width");
-        this.length = document.getElementById("length");
-        this.properties = [this.sku, this.name, this.price, this.size, this.selector, this.length, this.width, this.height, this.weight];
-
-        // let props = ["sku", "name", "price", "size", "type", "length", "width", "height", "weight"];
-        // //let props = this.props;
-        // props.forEach(function (elem) {
-        //     console.log(elem);
-        //     // elem = document.getElementById(`${elem.id}`);
-        //     // console.log(elem["sku"]);
-        // })
-    }
-
-
-    checkValidity() {
-        let properties = this.props;
-        properties.forEach(function (elem) {
-            let error = document.querySelector(`#${elem.id} + span.error`);
-            elem.addEventListener('input', function (e) {
-                if (elem.validity.valid) {
-                    error.textContent = '';
-                } else if (elem.validity.tooShort) {
-
-                    error.textContent = `!!!The value should be at least ${elem.minLength}
-                            characters; you enters ${elem.value.length}.`;
-                }
-            });
-        });
-    }
-
+    // checkValidity() {
+    //     this.properties.forEach(elem => {
+    //         let error = document.querySelector(`#${elem.id}+span.error`);
+    //         if (elem.validity.valueMissing) {
+    //             // this.errormessage.set(`#${elem.id}`, `Please, insert ${elem.name}`);
+    //             //this.error = document.querySelector(`#${elem.id}+span.error`);
+    //             error.textContent = `Please, insert ${elem.name}`;
+    //             return false;
+    //         } else if (elem.validity.tooShort) {
+    //             //this.errormessage.set(`#${elem.id}`, `The value should be at least ${elem.minLength}
+    //             //characters you have inserted ${elem.value.length}.`);
+    //             //this.error = document.querySelector(`#${elem.id}+span.error`);
+    //             error.textContent = `!!!The value should be at least ${elem.minLength}
+    //              characters you have inserted ${elem.value.length}.`;
+    //             return false;
+    //         } else if (elem.validity.patternMismatch) {
+    //             //this.error = document.querySelector(`#${elem.id}+span.error`);
+    //             error.textContent = `Please insert number`;
+    //             // return false;
+    //         } else if (elem.validity.rangeUnderflow) {
+    //             error.textContent = `Value must be greater than 0`;
+    //             return false;
+    //         } else if (elem.validity.rangeOverflow) {
+    //             error.textContent = `Value must be less than ${elem.max}`;
+    //         } else {
+    //             //this.error = document.querySelector(`#${elem.id}+span.error`);
+    //             error.textContent = '';
+    //             //console.log(this.errormessage);
+    //
+    //         }
+    //
+    //
+    //     });
+    // }
     checkProductType() {
-        let selector = this.selector;
-        let disk = this.disk;
-        let size = this.size;
-        let book = this.book;
-        let furniture = this.furniture;
-        let length = this.length;
-        //Why don't work through this?
-        selector.addEventListener('change', function (e) {
-            if (selector.value === 'Disk') {
-                disk.className = 'form__item';
-                size.setAttribute("required", "required");
-                book.className = 'form__item--hidden';
-                furniture.className = 'form__item--hidden';
+        //this.selector.addEventListener('change', (e) => {
+        if (this.selector.value === 'Disk') {
+            this.disk.className = 'form__item';
+            this.isRequired("#size", "Please enter size!");
+            this.isNumber("#size", "Please provide the data of indicated type");
+            this.isMin("#size", "Value must be greater than 0", 1);
+            this.book.className = 'form__item--hidden';
+            this.furniture.className = 'form__item--hidden';
 
-            } else if (selector.value === 'Book') {
-                book.className = 'form__item';
-                weight.setAttribute("required", "required");
-                disk.className = 'form__item--hidden';
-                furniture.className = 'form__item--hidden';
+        } else if (this.selector.value === 'Book') {
+            this.book.className = 'form__item';
+            this.isRequired("#weight", "Please enter weight!");
+            this.isNumber("#weight", "Please provide the data of indicated type");
+            this.isMax("#weight", "Value must be less than 1001", 1001);
+            this.isMin("#weight", "Value must be greater than 0", 1);
+            this.disk.className = 'form__item--hidden';
+            this.furniture.className = 'form__item--hidden';
 
-            } else if (selector.value === 'Furniture') {
-                furniture.className = 'form__item';
-                height.setAttribute("required", "required");
-                length.setAttribute("required", "required");
-                width.setAttribute("required", "required");
-                book.className = 'form__item--hidden';
-                disk.className = 'form__item--hidden';
-            }
-        });
+        } else if (this.selector.value === 'Furniture') {
+            this.furniture.className = 'form__item';
+            this.isRequired("#height", "Please enter height");
+            this.isNumber("#height", "Please provide the data of indicated type");
+            this.isMin("#height", "Value must be greater than 0", 1);
+            this.isRequired("#length", "Please enter length");
+            this.isNumber("#length", "Please provide the data of indicated type");
+            this.isMin("#length", "Value must be greater than 0", 1);
+            this.isRequired("#width", "Please enter width");
+            this.isNumber("#width", "Please provide the data of indicated type");
+            this.isMin("#width", "Value must be greater than 0", 1);
+            this.book.className = 'form__item--hidden';
+            this.disk.className = 'form__item--hidden';
+        }
+        // });
+
+
+        // else {
+        //
+        //     this.isRequired("#sku", "Please enter sku!");
+        //     this.isAlphaNumeric("#sku", "SKU must be alpha number");
+        //     this.hasMax("#sku", "SKU must be maximum 10 characters");
+        //
+        //     this.isRequired("#name", "Please enter name!");
+        //     this.isAlphaNumeric("#name", "Name must be alpha number");
+        //     this.hasMax("#name", "Name must be maximum 10 characters");
+        //
+        //     this.isRequired("#price", "Please enter price!");
+        //     this.isMin("#price", "Price should be at least 1$", 1);
+        //     this.isMax("#price", "Price should be maximum 1000$", 1000);
+        //     this.isNumber("#price", "Please provide the data of indicated type");
+        //
+        //     this.isRequired("#type", "Please choose product type!");
+        // }
+
     }
+
+    validate() {
+        this.isRequired("#sku", "Please enter sku!");
+        this.isAlphaNumeric("#sku", "SKU must be alpha number");
+        this.hasMax("#sku", "SKU must be maximum 10 characters");
+
+        this.isRequired("#name", "Please enter name!");
+        this.isAlphaNumeric("#name", "Name must be alpha number");
+        this.hasMax("#name", "Name must be maximum 10 characters");
+
+        this.isRequired("#price", "Please enter price!");
+        this.isMin("#price", "Price should be at least 1$", 1);
+        this.isMax("#price", "Price should be maximum 1000$", 1000);
+        this.isNumber("#price", "Please provide the data of indicated type");
+
+        this.isRequired("#type", "Please choose product type!");
+    }
+
 
     checkSKU() {
         let error = document.querySelector('#sku+ span.error');
-        document.forms.product_form.onsubmit = function (e) {
+        // document.forms.product_form.onsubmit = (e) => {
+        //     e.preventDefault();
 
+        fetch('/js/db.php', {
+            method: 'POST',
+            body: new FormData(document.forms.product_form),
+            //body: new FormData(this),
+        }).then(
+            response => {
+                return response.text();
+            }
+        ).then(
+            text => {
 
-            fetch('/js/db.php', {
-                method: 'POST',
-                body: new FormData(this),
-            }).then(
-                response => {
-                    return response.text();
-                }
-            ).then(
-                text => {
-                    e.preventDefault();
-                    error.textContent = text;
-                }
-            );
-        };
+                this.errormessage.set(`#sku`, {required: text});
+                console.log(this.errormessage);
+                error.textContent = text;
+            }
+        );
+        //  };
 
     }
 
-
-    attr = [];
-    error = [];
-    // errormessage = [];
-    errormessage = new Map();
 
     handle() {
+        // console.log(this.errormessage);
+        if (this.errormessage.values() !== 0) {
+
+            this.errormessage.forEach((value, key) => {
+                this.error = document.querySelector(`${key}+span.error`);
 
 
-        if (this.errormessage.size > 0) {
-            //????Uncaught TypeError: Cannot set properties of undefined (setting 'error')
-            let error = this.error;
-            let errormessage = this.errormessage;
-            errormessage.forEach(function (value, key) {
-                error = document.querySelector(`${key}+span.error`);
-                error.textContent = value;
-                // console.log(errormessage);
-                // console.log(errormessage.size);
+                if (value.required) {
+                    this.error.textContent = value.required;
+                }
+                if (value.alphanumeric) {
+                    this.error.textContent = value.alphanumeric;
+                }
+                if (value.maxlength) {
+                    this.error.textContent = value.maxlength;
+                }
+                if (value.min) {
+                    this.error.textContent = value.min;
+                }
+                if (value.max) {
+                    this.error.textContent = value.max;
+                }
+                if (value.number) {
+                    this.error.textContent = value.number;
+                }
+
+
             });
         } else {
-            //redirect to productList use headers??? JS
+            return false;
+            //     document.forms.product_form.onsubmit = (form) => {
+            //         form.submit();
+            //     }
         }
-
-
-        // } else {
-        //
-        //     error.textContent = '';
-        //     console.log(error);
-        // }
-
-
-        // for (let key of this.errormessage.keys()) {
-        //     console.log(key);
-        //     this.error = document.querySelector(`${key}+span.error`);
-        //     this.error.setAttribute("required", "required");
-        //     for (let value of this.errormessage.values()) {
-        //         this.error.textContent = value;
-        //     }
-        // }
-
-
-        // let error = this.error;
-        // let errormessage = this.errormessage;
-        // error.forEach(function (elem) {
-        //     elem.textContent = errormessage;
-        // })
-
-
-        // let constraints = [this.isRequired(), this.isAlphaNumeric(), this.hasMax()];
-        // console.log(constraints);
-        //
-        // constraints.forEach(function (elem) {
-        //     elem.addEventListener('click keypress', function (e) {
-        //         if (elem.validity.valid) {
-        //             return true;
-        //             //this.errormessage.textContent = '';
-        //         } else {
-        //             return false;
-        //         }
-        //
-        //         // else if (elem.validity.tooShort) {
-        //         //     error.textContent = `!!!The value should be at least ${elem.minLength}
-        //         //             characters; you enters ${elem.value.length}.`;
-        //         // }
-        //     });
-        //
-        //
-        // });
-
     }
-
-    // isValid() {
-    //     if (this.handle()) {
-    //         console.log("the form is true");
-    //     } else {
-    //         console.log("the form is not valid");
-    //     }
-    // }
 
 
     isRequired(attribute, errormessage) {
-        this.attr = document.querySelector(`${attribute}`);
-        this.attr.setAttribute("required", "required");
-        if (this.attr.validity.valueMissing) {
-            this.errormessage.set(attribute, errormessage);
+        let input = document.querySelector(`${attribute}`);
+        input.setAttribute("required", "required");
+        if (input.validity.valueMissing) {
+            this.errormessage.set(attribute, {required: errormessage});
         } else {
-            //delete the record from array
-            this.errormessage.delete(attribute);
             this.error = document.querySelector(`${attribute} + span.error`);
             this.error.textContent = '';
         }
     }
 
     isAlphaNumeric(attribute, errormessage) {
-
-        //this.attr = document.querySelector(attribute);
-        this.attr = document.querySelector(`${attribute}`);
-        this.attr.setAttribute("pattern", "[A-Za-z]+[0-9]*");
-        if (this.attr.validity.patternMismatch) {
-            this.errormessage.set(attribute, errormessage);
+        let input = document.querySelector(`${attribute}`);
+        input.setAttribute("pattern", "[A-Za-z]+[0-9]*");
+        if (input.validity.patternMismatch) {
+            this.errormessage.set(attribute, {alphanumeric: errormessage});
         } else {
-            //delete the record from array
-            this.errormessage.delete(attribute);
+            this.error = document.querySelector(`${attribute} + span.error`);
+            this.error.textContent = '';
+        }
+    }
+
+    isNumber(attribute, errormessage) {
+        let input = document.querySelector(`${attribute}`);
+        input.setAttribute("pattern", "[0-9]*");
+        if (input.validity.patternMismatch) {
+            this.errormessage.set(attribute, {number: errormessage});
+        } else {
+            this.error = document.querySelector(`${attribute} + span.error`);
+            this.error.textContent = '';
+        }
+    }
+
+    isMin(attribute, errormessage, min) {
+        let input = document.querySelector(`${attribute}`);
+        input.setAttribute("min", min);
+        if (input.validity.rangeUnderflow) {
+            this.errormessage.set(attribute, {min: errormessage});
+        } else {
+            this.error = document.querySelector(`${attribute} + span.error`);
+            this.error.textContent = '';
+        }
+    }
+
+    isMax(attribute, errormessage, max) {
+        let input = document.querySelector(`${attribute}`);
+        input.setAttribute("max", max);
+        if (input.validity.rangeOverflow) {
+            this.errormessage.set(attribute, {max: errormessage});
+        } else {
             this.error = document.querySelector(`${attribute} + span.error`);
             this.error.textContent = '';
         }
@@ -205,60 +235,34 @@ class Validator {
 
 
     hasMax(attribute, errormessage) {
-        this.attr = document.querySelector(`${attribute}`);
-        this.attr.setAttribute("maxlength", "10");
-        if (this.attr.validity.tooLong) {
-            this.errormessage.set(attribute, errormessage);
+        let input = document.querySelector(`${attribute}`);
+        input.setAttribute("maxlength", "10");
+        if (input.validity.tooLong) {
+            this.errormessage.set(attribute, {maxlength: errormessage});
         } else {
-            //delete the record from array
-            this.errormessage.delete(attribute);
             this.error = document.querySelector(`${attribute} + span.error`);
             this.error.textContent = '';
         }
     }
 
 
-    checkOnSubmitEvent() {
-        let properties = this.properties;
-        document.forms.product_form.addEventListener('submit', function (e) {
-            properties.forEach(function (elem) {
-                let error = document.querySelector(`#${elem.id} + span.error`);
-                if (!elem.validity.valid) {
-                    e.preventDefault();
-                    error.textContent = `Please, insert ${elem.name}`;
-                }
-            });
-        });
-    }
-
 }
 
-document.addEventListener("submit", function (e) {
-    e.preventDefault();
+let validator = new Validator();
+document.addEventListener("click", function (e) {
+    //e.preventDefault();
 
-    let validator = new Validator();
-
-    validator.isRequired("#name", "Please fill in the name!");
-    validator.isRequired("#sku", "Please fill in the sku!");
-
-    validator.hasMax("#sku", "SKU must be maximum 10 characters");
-    validator.isAlphaNumeric("#sku", "SKU must be alpha number");
-    validator.isAlphaNumeric("#name", "Name must be alpha number");
+    validator.validate();
+    validator.checkSKU();
+    validator.checkProductType();
     validator.handle();
-
 
 });
 
-
-// validator.handle();
-// validator.isValid();
-
-// obj.checkValidity();
-// obj.checkProductType();
-// obj.checkOnSubmitEvent();
-// obj.checkSKU();
-
-
-
-
-
+document.addEventListener("submit", function (e) {
+    console.log(validator.handle());
+    e.preventDefault();
+    if (validator.handle()) {
+        e.preventDefault();
+    }
+});
