@@ -40,82 +40,43 @@ class Validator {
     //
     //     });
     // }
+    //it's not extensible
     checkProductType() {
         //this.selector.addEventListener('change', (e) => {
         if (this.selector.value === 'Disk') {
             this.disk.className = 'form__item';
-            this.isRequired("#size", "Please enter size!");
-            this.isNumber("#size", "Please provide the data of indicated type");
-            this.isMin("#size", "Value must be greater than 0", 1);
+            this.errormessage.delete("#weight");
+            this.errormessage.delete("#height");
+            this.errormessage.delete("#length");
+            this.errormessage.delete("#width");
+
             this.book.className = 'form__item--hidden';
             this.furniture.className = 'form__item--hidden';
 
         } else if (this.selector.value === 'Book') {
             this.book.className = 'form__item';
-            this.isRequired("#weight", "Please enter weight!");
-            this.isNumber("#weight", "Please provide the data of indicated type");
-            this.isMax("#weight", "Value must be less than 1001", 1001);
-            this.isMin("#weight", "Value must be greater than 0", 1);
+            this.errormessage.delete("#size");
+            this.errormessage.delete("#height");
+            this.errormessage.delete("#length");
+            this.errormessage.delete("#width");
+
             this.disk.className = 'form__item--hidden';
             this.furniture.className = 'form__item--hidden';
 
         } else if (this.selector.value === 'Furniture') {
             this.furniture.className = 'form__item';
-            this.isRequired("#height", "Please enter height");
-            this.isNumber("#height", "Please provide the data of indicated type");
-            this.isMin("#height", "Value must be greater than 0", 1);
-            this.isRequired("#length", "Please enter length");
-            this.isNumber("#length", "Please provide the data of indicated type");
-            this.isMin("#length", "Value must be greater than 0", 1);
-            this.isRequired("#width", "Please enter width");
-            this.isNumber("#width", "Please provide the data of indicated type");
-            this.isMin("#width", "Value must be greater than 0", 1);
+            this.errormessage.delete("#size");
+            this.errormessage.delete("#weight");
             this.book.className = 'form__item--hidden';
             this.disk.className = 'form__item--hidden';
         }
-        // });
-
-
-        // else {
-        //
-        //     this.isRequired("#sku", "Please enter sku!");
-        //     this.isAlphaNumeric("#sku", "SKU must be alpha number");
-        //     this.hasMax("#sku", "SKU must be maximum 10 characters");
-        //
-        //     this.isRequired("#name", "Please enter name!");
-        //     this.isAlphaNumeric("#name", "Name must be alpha number");
-        //     this.hasMax("#name", "Name must be maximum 10 characters");
-        //
-        //     this.isRequired("#price", "Please enter price!");
-        //     this.isMin("#price", "Price should be at least 1$", 1);
-        //     this.isMax("#price", "Price should be maximum 1000$", 1000);
-        //     this.isNumber("#price", "Please provide the data of indicated type");
-        //
-        //     this.isRequired("#type", "Please choose product type!");
-        // }
-
+        return this.errormessage;
+        //});
     }
 
-    validate() {
-        this.isRequired("#sku", "Please enter sku!");
-        this.isAlphaNumeric("#sku", "SKU must be alpha number");
-        this.hasMax("#sku", "SKU must be maximum 10 characters");
-
-        this.isRequired("#name", "Please enter name!");
-        this.isAlphaNumeric("#name", "Name must be alpha number");
-        this.hasMax("#name", "Name must be maximum 10 characters");
-
-        this.isRequired("#price", "Please enter price!");
-        this.isMin("#price", "Price should be at least 1$", 1);
-        this.isMax("#price", "Price should be maximum 1000$", 1000);
-        this.isNumber("#price", "Please provide the data of indicated type");
-
-        this.isRequired("#type", "Please choose product type!");
-    }
-
-
+    //???adds sku error to the errormessage, but it isn't counted by Map.size() method...and is not shown await
     checkSKU() {
-        let error = document.querySelector('#sku+ span.error');
+        //let error = document.querySelector('#sku+ span.error');
         // document.forms.product_form.onsubmit = (e) => {
         //     e.preventDefault();
 
@@ -130,139 +91,189 @@ class Validator {
         ).then(
             text => {
 
-                this.errormessage.set(`#sku`, {required: text});
-                console.log(this.errormessage);
-                error.textContent = text;
+                this.errormessage.set("#sku", {required: text});
+                //error.textContent = text;
             }
         );
-        //  };
-
     }
 
 
-    handle() {
-        // console.log(this.errormessage);
-        if (this.errormessage.values() !== 0) {
+    handle(errormessagesAfterCheckProductType) {
+        console.log(this.errormessage);
+        if (this.errormessage.size !== 0) {
+
 
             this.errormessage.forEach((value, key) => {
-                this.error = document.querySelector(`${key}+span.error`);
-
+                let error = document.querySelector(`${key}+span.error`);
 
                 if (value.required) {
-                    this.error.textContent = value.required;
+                    error.textContent = value.required;
+                    console.log(value.required);
                 }
                 if (value.alphanumeric) {
-                    this.error.textContent = value.alphanumeric;
+                    error.textContent = value.alphanumeric;
                 }
                 if (value.maxlength) {
-                    this.error.textContent = value.maxlength;
+                    error.textContent = value.maxlength;
                 }
                 if (value.min) {
-                    this.error.textContent = value.min;
+                    error.textContent = value.min;
                 }
                 if (value.max) {
-                    this.error.textContent = value.max;
+                    error.textContent = value.max;
                 }
                 if (value.number) {
-                    this.error.textContent = value.number;
+                    error.textContent = value.number;
                 }
 
 
             });
         } else {
-            return false;
+            console.log('there are no errors');
+            //return false;
             //     document.forms.product_form.onsubmit = (form) => {
             //         form.submit();
             //     }
         }
     }
 
+    clearErrorMessage(attribute) {
+        let error = document.querySelector(`${attribute} + span.error`);
+        error.textContent = '';
+    }
+
+    initInput(attribute) {
+        let input = document.querySelector(`${attribute}`);
+        return input;
+    }
+
 
     isRequired(attribute, errormessage) {
-        let input = document.querySelector(`${attribute}`);
+        let input = this.initInput(attribute);
         input.setAttribute("required", "required");
         if (input.validity.valueMissing) {
             this.errormessage.set(attribute, {required: errormessage});
         } else {
-            this.error = document.querySelector(`${attribute} + span.error`);
-            this.error.textContent = '';
+            this.clearErrorMessage(attribute);
         }
     }
 
     isAlphaNumeric(attribute, errormessage) {
-        let input = document.querySelector(`${attribute}`);
+        let input = this.initInput(attribute);
         input.setAttribute("pattern", "[A-Za-z]+[0-9]*");
         if (input.validity.patternMismatch) {
             this.errormessage.set(attribute, {alphanumeric: errormessage});
         } else {
-            this.error = document.querySelector(`${attribute} + span.error`);
-            this.error.textContent = '';
+            this.clearErrorMessage(attribute);
         }
     }
 
     isNumber(attribute, errormessage) {
-        let input = document.querySelector(`${attribute}`);
+        let input = this.initInput(attribute);
         input.setAttribute("pattern", "[0-9]*");
         if (input.validity.patternMismatch) {
             this.errormessage.set(attribute, {number: errormessage});
         } else {
-            this.error = document.querySelector(`${attribute} + span.error`);
-            this.error.textContent = '';
+            this.clearErrorMessage(attribute);
         }
     }
 
     isMin(attribute, errormessage, min) {
-        let input = document.querySelector(`${attribute}`);
+        let input = this.initInput(attribute);
         input.setAttribute("min", min);
         if (input.validity.rangeUnderflow) {
             this.errormessage.set(attribute, {min: errormessage});
         } else {
-            this.error = document.querySelector(`${attribute} + span.error`);
-            this.error.textContent = '';
+            this.clearErrorMessage(attribute);
         }
     }
 
     isMax(attribute, errormessage, max) {
-        let input = document.querySelector(`${attribute}`);
+        let input = this.initInput(attribute);
         input.setAttribute("max", max);
         if (input.validity.rangeOverflow) {
             this.errormessage.set(attribute, {max: errormessage});
         } else {
-            this.error = document.querySelector(`${attribute} + span.error`);
-            this.error.textContent = '';
+            this.clearErrorMessage(attribute);
         }
     }
 
 
     hasMax(attribute, errormessage) {
-        let input = document.querySelector(`${attribute}`);
+        let input = this.initInput(attribute);
         input.setAttribute("maxlength", "10");
         if (input.validity.tooLong) {
             this.errormessage.set(attribute, {maxlength: errormessage});
         } else {
-            this.error = document.querySelector(`${attribute} + span.error`);
-            this.error.textContent = '';
+            this.clearErrorMessage(attribute);
         }
     }
 
 
 }
 
-let validator = new Validator();
+
 document.addEventListener("click", function (e) {
-    //e.preventDefault();
+    let validator = new Validator();
+    //validator.isRequired("#sku", "Please enter sku!");
+    validator.isAlphaNumeric("#sku", "SKU must be alpha number");
+    validator.hasMax("#sku", "SKU must be maximum 10 characters");
 
-    validator.validate();
+    validator.isRequired("#name", "Please enter name!");
+    validator.isAlphaNumeric("#name", "Name must be alpha number");
+    validator.hasMax("#name", "Name must be maximum 10 characters");
+
+    validator.isRequired("#price", "Please enter price!");
+    validator.isMin("#price", "Price should be at least 1$", 1);
+    validator.isMax("#price", "Price should be maximum 1000$", 1000);
+    validator.isNumber("#price", "Please provide the data of indicated type");
+
+    validator.isRequired("#type", "Please choose product type!");
+
+    validator.isRequired("#size", "Please enter size!");
+    validator.isNumber("#size", "Please provide the data of indicated type");
+    validator.isMin("#size", "Value must be greater than 0", 1);
+
+
+    validator.isRequired("#weight", "Please enter weight!");
+    validator.isNumber("#weight", "Please provide the data of indicated type");
+    validator.isMax("#weight", "Value must be less than 1001", 1001);
+    validator.isMin("#weight", "Value must be greater than 0", 1);
+
+    validator.isRequired("#height", "Please enter height");
+    validator.isNumber("#height", "Please provide the data of indicated type");
+    validator.isMin("#height", "Value must be greater than 0", 1);
+    validator.isRequired("#length", "Please enter length");
+    validator.isNumber("#length", "Please provide the data of indicated type");
+    validator.isMin("#length", "Value must be greater than 0", 1);
+    validator.isRequired("#width", "Please enter width");
+    validator.isNumber("#width", "Please provide the data of indicated type");
+    validator.isMin("#width", "Value must be greater than 0", 1);
     validator.checkSKU();
-    validator.checkProductType();
-    validator.handle();
+    validator.handle(validator.checkProductType());
 
-});
-
-document.addEventListener("submit", function (e) {
-    console.log(validator.handle());
-    e.preventDefault();
-    if (validator.handle()) {
+    if (validator.errormessage.size === 0) {
+        document.forms.product_form.onsubmit = (product_form) => {
+            product_form.submit();
+        }
+    } else {
         e.preventDefault();
     }
+
 });
+
+// document.addEventListener("submit", (e) => {
+//
+//     // console.log(validator.handle());
+//     // e.preventDefault();
+//     if (validator.errormessage.size === 0) {
+//         console.log('there are no errors');
+//         document.forms.product_form.onsubmit = (product_form) => {
+//             product_form.submit();
+//         }
+//     } else {
+//         console.log('there are errors');
+//         e.preventDefault();
+//     }
+//
+// });
