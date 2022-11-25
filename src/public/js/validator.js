@@ -138,6 +138,12 @@ class Validator {
             this.errormessage.set(input.id, errormessage);
         }
     }
+    
+    isValid() {
+        if (this.errormessage.size === 0) {
+            return true;
+        }
+    }
 
 
 }
@@ -187,7 +193,7 @@ document.addEventListener("click", function (e) {
     validator.handle(validator.checkProductType());
 
 
-    if (validator.errormessage.size === 0) {
+    if (validator.isValid()) {
         document.forms.product_form.onsubmit = (product_form) => {
             product_form.submit();
         }
