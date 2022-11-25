@@ -15,16 +15,16 @@ class ShowProductsController extends Controller
     public function action()
     {
         $data = $this->getProductsModel()->getProducts();
-
+        
         foreach ($data as $elem) {
             $productClass = $elem['type'];
-            if ($productClass = 'Disc') {
+            if ($productClass === 'Disc') {
                 $product[] = new Disc($elem);
             }
-            if ($productClass = 'Book') {
+            if ($productClass === 'Book') {
                 $product[] = new Book($elem);
             }
-            if ($productClass = 'Furniture') {
+            if ($productClass === 'Furniture') {
                 $product[] = new Furniture($elem);
             }
             //Doesn't work!!!
