@@ -1,0 +1,23 @@
+{
+  "name": "user/scandi.loc",
+  "description": "\"test task of creating and deleting new products\"",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Tatsiana Hrebianek",
+      "email": "tatsiana.hrebianek@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
+  },
+  "require": {
+    "php": "7.4.3",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "ext-mysqli": "*"
+  }
+}

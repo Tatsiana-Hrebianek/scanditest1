@@ -1,10 +1,22 @@
 <?php
-namespace app\controllers;
 
-class TemplateController
+namespace App\Component;
+
+/**
+ *
+ */
+class TemplateComponent
 {
-    public $template;
+    /**
+     * @var string
+     */
+    public string $template;
 
+    /**
+     * @param $template
+     * @param $data
+     * @return false|string
+     */
     public function render($template, $data)
     {
         extract($data);

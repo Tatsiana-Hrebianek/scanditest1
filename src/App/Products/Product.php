@@ -1,50 +1,88 @@
 <?php
 
-namespace app\products;
+namespace App\Products;
+/**
+ *
+ */
 class Product
 {
-    private $name, $sku, $price, $type;
+    /**
+     * @var string
+     */
+    private string $name, $sku, $type;
+    private float $price;
 
+    /**
+     * @param $sku
+     * @return void
+     */
     protected function setSKU($sku)
     {
         $this->sku = $sku;
     }
 
-    public function getSKU()
+    /**
+     * @return string
+     */
+    public function getSKU(): string
     {
         return $this->sku;
     }
 
+    /**
+     * @param $name
+     * @return void
+     */
     protected function setName($name)
     {
         $this->name = $name;
     }
 
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param $price
+     * @return void
+     */
     protected function setPrice($price)
     {
         $this->price = $price;
     }
 
-    public function getPrice()
+    /**
+     * @return float
+     */
+    public function getPrice(): float
     {
         return $this->price;
     }
 
+    /**
+     * @param $type
+     * @return void
+     */
     protected function setType($type)
     {
         $this->type = $type;
     }
 
-    public function getType()
+    /**
+     * @return string
+     */
+    public function getType(): string
     {
         return $this->type;
     }
 
+    /**
+     * @param array $arr
+     */
     public function __construct($arr)
     {
         $this->setName($arr['name']);

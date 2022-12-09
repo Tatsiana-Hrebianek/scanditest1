@@ -18,9 +18,7 @@
     </header>
     <main class="wrapper">
         <?php if (isset($product)) {
-            foreach ($product
-
-                     as $elem): ?>
+            foreach ($product as $elem): ?>
                 <div class="wrapper__bblock">
                     <div class="wrapper__bblock-checkbox">
                         <input type="checkbox" name="sku[]" value="<?= $elem->getSKU() ?>">

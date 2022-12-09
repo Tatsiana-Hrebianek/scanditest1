@@ -1,22 +1,28 @@
 <?php
 
-namespace app;
+namespace App;
 
-use app\products\Product;
-use app\products\Disc;
-use app\products\Book;
-use app\products\Furniture;
-use app\controllers\DeleteProductsController;
-use app\controllers\ShowErrorPageController;
-use app\controllers\ShowProductsController;
-use app\controllers\ShowProductFormController;
-use app\controllers\CheckSKUController;
-use app\controllers\AddProductsController;
+use App\Controllers\DeleteProductsController;
+use App\Controllers\ShowErrorPageController;
+use App\Controllers\ShowProductsController;
+use App\Controllers\ShowProductFormController;
+use App\Controllers\CheckSKUController;
+use App\Controllers\AddProductsController;
+use Exception;
 
+/**
+ *
+ */
 class FrontController extends Controller
 {
-    private $url;
-    private $httpRequestMethod;
+    /**
+     * @var string
+     */
+    private string $url;
+    /**
+     * @var string
+     */
+    private string $httpRequestMethod;
 
     public function __construct()
     {
@@ -24,6 +30,9 @@ class FrontController extends Controller
         $this->requestMethodInit();
     }
 
+    /**
+     * @return void
+     */
     protected function urlInit()
     {
         if (!empty($_SERVER['REQUEST_URI'])) {
@@ -33,6 +42,9 @@ class FrontController extends Controller
         }
     }
 
+    /**
+     * @return void
+     */
     public function requestMethodInit()
     {
         if (!empty($_SERVER['REQUEST_METHOD'])) {
@@ -42,40 +54,52 @@ class FrontController extends Controller
         }
     }
 
-    public function getURL()
+    /**
+     * @return string
+     */
+    public function getURL(): string
     {
         return $this->url;
     }
 
-    public function getHTTPRequestMethod()
+    /**
+     * @return string
+     */
+    public function getHTTPRequestMethod(): string
     {
         return $this->httpRequestMethod;
     }
 
-    public function route()
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function route($ProductsModelInstance)
     {
+
         if (($this->getURL() === '/') && ($this->getHTTPRequestMethod() === 'GET')) {
             $showproducts = new ShowProductsController();
-            $showproducts->action();
+            $showproducts->action($ProductsModelInstance);
         } elseif ($this->getURL() === '/' && $this->getHTTPRequestMethod() === 'POST' && !count($_POST)) {
             $showproducts = new ShowProductsController();
-            $showproducts->action();
+            $showproducts->action($ProductsModelInstance);
         } elseif (($this->getURL() === '/addProduct') && ($this->getHTTPRequestMethod() === 'GET')) {
             $showproductform = new ShowProductFormController();
             $showproductform->action();
         } elseif (($this->getURL() === '/') && (isset($_POST['sku'], $_POST['name'], $_POST['price']))) {
             $addproduct = new AddProductsController();
-            $addproduct->action();
+            $addproduct->action($ProductsModelInstance);
         } elseif (($this->getURL() === '/db') && (isset ($_POST['sku']))) {
             $checkSKU = new CheckSKUController();
-            $checkSKU->action();
+            $checkSKU->action($ProductsModelInstance);
         } elseif (($this->getURL() === '/') && (isset($_POST['sku']))) {
             $deleteproduct = new DeleteProductsController();
-            $deleteproduct->action();
+            $deleteproduct->action($ProductsModelInstance);
 
         } else {
             $errorpage = new ShowErrorPageController();
             $errorpage->action();
+            throw new Exception("This address doesn't exists!    " . date('Y-m-d H:i:s'));
         }
     }
 }
