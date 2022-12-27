@@ -2,11 +2,12 @@
 
 namespace App\Controllers;
 
-//use App\Controller;
+use App\Models\ProductsModel;
 use App\Products\Book;
 use App\Products\Disc;
-use App\Products\DiscCreator;
 use App\Products\Furniture;
+use App\Controllers\Router;
+
 use Exception;
 
 /**
@@ -15,18 +16,23 @@ use Exception;
  */
 class AddProductsController
 {
+    private $productsModel;
+
+    public function __construct(ProductsModel $productsModel)
+    {
+        $this->productsModel = $productsModel;
+    }
+
     /**
      * @return void
      */
-    public function action($ProductsModelInstance)
+    public function action()
     {
         /** @var string $productClass */
         $productClass = $_POST['type'];
         $product = [];
         if ($productClass === 'Disc') {
-            $product = new DiscCreator();
-            $product = $product->createProduct($_POST);
-            //$product = new Disc($_POST);
+            $product = new Disc($_POST);
         }
         if ($productClass === 'Book') {
             $product = new Book($_POST);
@@ -35,19 +41,10 @@ class AddProductsController
             $product = new Furniture($_POST);
         }
 
-        //var_dump($product);
-        //Doesn't find class!!!
+        $this->productsModel->addProduct($product);
 
-        //$product = new $productClass($_POST);
+        header('Location: /');
 
-        //var_dump($this->getProductsModel()->isProductExists($_POST['sku']));
-
-
-        //$this->getProductsModel()->addProduct($product);
-        $ProductsModelInstance->addProduct($product);
-
-        $showProducts = new ShowProductsController();
-        $showProducts->action($ProductsModelInstance);
 
     }
 }

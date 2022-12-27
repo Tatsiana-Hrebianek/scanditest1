@@ -2,12 +2,17 @@
 
 namespace App;
 
-use App\Models\ProductsModel;
-use PDO;
+use App\Controllers\AddProductsController;
+use App\Controllers\CheckSKUController;
+use App\Controllers\DeleteProductsController;
+use App\Controllers\ShowProductFormController;
+use App\Controllers\ShowProductsController;
+use App\Controllers\Router;
 use Exception;
 
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
+
 
 $isDebugging = true;
 
@@ -26,8 +31,45 @@ try {
 
     require_once __DIR__ . '/config/config.php';
     require_once '../vendor/autoload.php';
-    $ProductsModelInstance = new ProductsModel(new PDO(DSN, NAME, PASSWORD, $options));
-    (new FrontController)->route($ProductsModelInstance);
+    $dependencies = require_once __DIR__ . '/config/dependencies.php';
+
+    $container = new Container($dependencies);
+    $router = new Router();
+
+    $router->get('/', ShowProductsController::class . '::action');
+    $router->post('/', AddProductsController::class . '::action');
+    $router->post('/deleteProducts', DeleteProductsController::class . '::action');
+    $router->get('/addProduct', ShowProductFormController::class . '::action');
+    $router->post('/checkSKU', CheckSKUController::class . '::action');
+
+//    $router->addNotFoundHandler(function () {
+//        echo 'Not Found';
+//    });
+
+//    $router->post('/', function (array $params) {
+//        $container = new Container();
+//        if (isset($params['sku'])) {
+//            $container->get(DeleteProductsController::class)->action();
+//        }
+//
+//        if (!count($params)) {
+//            $container->get(ShowProductsController::class)->action();
+//        }
+//
+//        if (isset($params['sku'], $params['name'], $params['price'])) {
+//            $h = $container->get(AddProductsController::class);
+//            $h->action();
+//        }
+//
+//
+//    });
+
+
+    //once we define our routs we have a method run()
+    //method run will look for handler that has to be executed as for given route
+    $router->route($container);
+
+
 } catch (Exception $e) {
     if ($isDebugging) {
         echo $e->getMessage();

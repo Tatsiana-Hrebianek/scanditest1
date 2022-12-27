@@ -9,15 +9,21 @@ use App\Models\ProductsModel;
  */
 class DeleteProductsController
 {
+    private $productsModel;
+
+    public function __construct(ProductsModel $productsModel)
+    {
+        $this->productsModel = $productsModel;
+    }
+
     /**
      * @return void
      */
-    public function action(ProductsModel $ProductsModelInstance)
+    public function action()
     {
-        //$this->getProductsModel()->deleteProducts();
-
-        $ProductsModelInstance->deleteProducts();
-        $showProducts = new ShowProductsController();
-        $showProducts->action($ProductsModelInstance);
+        $this->productsModel->deleteProducts();
+        header('Location: /');
     }
+
+
 }

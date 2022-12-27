@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Products\IProduct;
+use App\Products\Product;
 use PDO;
 use Exception;
 
@@ -11,35 +11,13 @@ use Exception;
  */
 class ProductsModel
 {
-    public object $dbConnection;
+    private object $dbConnection;
 
     public function __construct(PDO $dbconnection)
+
     {
         $this->dbConnection = $dbconnection;
     }
-
-//    private function __construct(PDO $dbconnection)
-//    {
-//        $this->dbConnection = $dbconnection;
-//    }
-
-    /**
-     * @return ProductsModel|mixed
-     */
-//    public static function getInstance()
-//    {
-//        static $instance;
-//        if (!isset($instance)) {
-//            $options = [
-//                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-//                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-//                \PDO::ATTR_EMULATE_PREPARES => false,
-//            ];
-//            $instance = new self(new PDO("mysql:host=db;dbname=scandi;charset=utf8mb4",
-//                'root', 'root', $options));
-//        }
-//        return $instance;
-//    }
 
     /**
      * @return PDO
@@ -61,11 +39,11 @@ class ProductsModel
     }
 
     /**
-     * @param IProduct $product
+     * @param Product $product
      * @return void
      * @throws Exception
      */
-    public function addProduct(IProduct $product)
+    public function addProduct(Product $product)
     {
         if (empty($this->isProductExists($product->getSKU()))) {
             $sku = $product->getSKU();
@@ -99,8 +77,14 @@ class ProductsModel
             $size = $product->getSize();
         }
 
-        $this->getDBConnection()->prepare("INSERT INTO `products` ( `sku`, `name`, `price`, `size`, `height`, `width`, `length`, `weight`, `type`)
-VALUES ('$sku', '$name', '$price', $size, $height, $width, $length, $weight, '$type')")->execute();
+        $this->getDBConnection()->prepare("INSERT INTO `products` ( `sku`, `name`, `price`, `size`, `height`, `width`,
+                        `length`, `weight`, `type`) VALUES ('$sku', '$name', '$price', $size, $height, $width, $length, $weight, '$type')")->execute();
+
+
+//        $this->getDBConnection()->prepare("INSERT INTO `products` ( `sku`, `name`, `price`, `size`, `height`, `width`, `length`, `weight`, `type`)
+//VALUES (':sku, ':name', ':price', :size, :height, :width, :length, :weight, ':type')")->execute();
+
+
     }
 
     /**
@@ -126,4 +110,37 @@ VALUES ('$sku', '$name', '$price', $size, $height, $width, $length, $weight, '$t
         $sth->execute();
         return $sth->fetchAll();
     }
+
+    /**
+     *
+     * @return void
+     */
+    public function checkSKU()
+    {
+        $inp = $_POST['param'];
+        $value = $_POST[$inp];
+        $error = $_POST['error'];
+
+        $query = "SELECT * FROM products WHERE sku='$value'";
+        $sth = $this->getDBConnection()->prepare($query);
+        $sth->execute();
+        $row = $sth->fetch();
+
+        if (!empty($value)) {
+
+            if ($value === $row["$inp"]) {
+                $mes = ['error1' => "$error"];
+            } else {
+                $mes = ['error1' => "ok"];
+            }
+            echo json_encode($mes);
+
+        } else {
+            $mes = ['error1' => "Please enter $inp!"];
+            echo json_encode($mes);
+
+        }
+    }
+
+
 }

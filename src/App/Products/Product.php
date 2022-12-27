@@ -1,16 +1,33 @@
 <?php
 
 namespace App\Products;
+
+use Exception;
+
 /**
  *
  */
-class Product
+abstract class Product
 {
     /**
      * @var string
      */
     private string $name, $sku, $type;
+    /**
+     * @var float
+     */
     private float $price;
+
+    /**
+     * @param $arr
+     */
+    public function __construct($arr)
+    {
+        $this->setName($arr['name']);
+        $this->setSKU($arr['sku']);
+        $this->setPrice($arr['price']);
+        $this->setType($arr['type']);
+    }
 
     /**
      * @param $sku
@@ -18,7 +35,18 @@ class Product
      */
     protected function setSKU($sku)
     {
-        $this->sku = $sku;
+        $reg = '{[A-Za-z]+[0-9]*}';
+
+        if (strlen($sku) > 10) {
+            throw new Exception("SKU should be maximum 10 characters");
+        }
+        if (!preg_match($reg, $sku)) {
+            throw new Exception("SKU should be alpha number");
+        } else {
+            $this->sku = $sku;
+        }
+
+
     }
 
     /**
@@ -35,7 +63,16 @@ class Product
      */
     protected function setName($name)
     {
-        $this->name = $name;
+        $reg = '{[A-Za-z]+[0-9]*}';
+
+        if (strlen($name) > 10) {
+            throw new Exception("Name should be maximum 10 characters");
+        }
+        if (!preg_match($reg, $name)) {
+            throw new Exception("Name should be alpha number");
+        } else {
+            $this->name = $name;
+        }
     }
 
     /**
@@ -52,7 +89,22 @@ class Product
      */
     protected function setPrice($price)
     {
-        $this->price = $price;
+        $reg = "{[0-9]*\.[0-9]*}";
+
+        if ($price < 1) {
+            throw new Exception("Price can't be less than 1 dollar");
+        }
+        if ($price > 1000) {
+            throw new Exception("Price should be maximum 1000$");
+        }
+
+        if (!preg_match($reg, $price)) {
+            throw new Exception("Price should be float");
+        } else {
+            $this->price = $price;
+        }
+
+
     }
 
     /**
@@ -80,14 +132,5 @@ class Product
         return $this->type;
     }
 
-    /**
-     * @param array $arr
-     */
-    public function __construct($arr)
-    {
-        $this->setName($arr['name']);
-        $this->setSku($arr['sku']);
-        $this->setPrice($arr['price']);
-        $this->setType($arr['type']);
-    }
+
 }
