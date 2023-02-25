@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use App\Controllers\DeleteProductsController;
@@ -8,12 +10,13 @@ use App\Controllers\ShowProductsController;
 use App\Controllers\ShowProductFormController;
 use App\Controllers\CheckSKUController;
 use App\Controllers\AddProductsController;
+use PDO;
 use Exception;
 
 /**
  *
  */
-class FrontController extends Controller
+class FrontController
 {
     /**
      * @var string
@@ -74,33 +77,47 @@ class FrontController extends Controller
      * @return void
      * @throws Exception
      */
-    public function route($ProductsModelInstance)
+    public function route($container)
     {
 
         if (($this->getURL() === '/') && ($this->getHTTPRequestMethod() === 'GET')) {
-            $showproducts = new ShowProductsController();
-            $showproducts->action($ProductsModelInstance);
+            $showproducts = $container->get('ShowProductsController');
+            $showproducts->action();
         } elseif ($this->getURL() === '/' && $this->getHTTPRequestMethod() === 'POST' && !count($_POST)) {
-            $showproducts = new ShowProductsController();
-            $showproducts->action($ProductsModelInstance);
+            $showproducts = $container->get('ShowProductsController');
+            $showproducts->action();
         } elseif (($this->getURL() === '/addProduct') && ($this->getHTTPRequestMethod() === 'GET')) {
-            $showproductform = new ShowProductFormController();
+            $showproductform = $container->get('ShowProductFormController');
             $showproductform->action();
         } elseif (($this->getURL() === '/') && (isset($_POST['sku'], $_POST['name'], $_POST['price']))) {
-            $addproduct = new AddProductsController();
-            $addproduct->action($ProductsModelInstance);
-        } elseif (($this->getURL() === '/db') && (isset ($_POST['sku']))) {
-            $checkSKU = new CheckSKUController();
-            $checkSKU->action($ProductsModelInstance);
-        } elseif (($this->getURL() === '/') && (isset($_POST['sku']))) {
-            $deleteproduct = new DeleteProductsController();
-            $deleteproduct->action($ProductsModelInstance);
+            $addproduct = $container->get('AddProductsController');
+            $addproduct->action();
+        } elseif (($this->getURL() === '/checkSKU') && (isset ($_POST['sku']))) {
+            $checkSKU = $container->get('CheckSKUController');
+            $checkSKU->action();
+        } elseif (($this->getURL() === '/deleteProducts') && (isset($_POST['sku']))) {
+            $deleteproduct = $container->get('DeleteProductsController');
+            $deleteproduct->action();
 
         } else {
-            $errorpage = new ShowErrorPageController();
+            $errorpage = $container->get('ShowErrorPageController');
             $errorpage->action();
             throw new Exception("This address doesn't exists!    " . date('Y-m-d H:i:s'));
         }
     }
+
+    //receiving data
+    public function get(string $path, $class)
+    {
+
+    }
+
+    //posting data
+    public function post(string $path, $class)
+    {
+
+    }
+
+
 }
 
