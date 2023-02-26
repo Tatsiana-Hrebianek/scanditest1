@@ -6,7 +6,7 @@ namespace App\Controllers;
 
 use App\Controllers\CheckSKUController;
 use App\Controllers\ShowProductsController;
-use App\Container;
+
 
 class Router
 {
@@ -52,7 +52,7 @@ class Router
     }
 
 
-    public function route(Container $container)
+    public function route($container)
     {
 
         //let's get url from the server
@@ -74,7 +74,9 @@ class Router
             if (is_array($parts)) {
                 $className = array_shift($parts);
 
-                //$handler = new $className();
+                $className = explode('\\', $className);
+                $className = array_pop($className);
+
                 $handler = $container->get($className);
 
                 //array_pop
