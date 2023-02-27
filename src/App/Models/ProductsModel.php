@@ -47,6 +47,19 @@ class ProductsModel
      */
     public function addProduct(Product $product)
     {
+//        $stm = $this->getDBConnection()->prepare("INSERT INTO products ( sku, name, price, size, height, width, length, weight, type)
+//VALUES (:sku, :name, :price, :size, :height, :width, :length, :weight, :type)");
+//
+//        $stm->bindParam(':sku', $sku);
+//        $stm->bindParam(':name', $name);
+//        $stm->bindParam(':price', $price);
+//        $stm->bindParam(':size', $size);
+//        $stm->bindParam(':height', $height);
+//        $stm->bindParam(':width', $width);
+//        $stm->bindParam(':length', $length);
+//        $stm->bindParam(':weight', $weight);
+//        $stm->bindParam(':type', $type);
+
         if (empty($this->isProductExists($product->getSKU()))) {
             $sku = $product->getSKU();
 
@@ -83,10 +96,7 @@ class ProductsModel
                         `length`, `weight`, `type`) VALUES ('$sku', '$name', '$price', $size, $height, $width, $length, $weight, '$type')")->execute();
 
 
-//        $this->getDBConnection()->prepare("INSERT INTO `products` ( `sku`, `name`, `price`, `size`, `height`, `width`, `length`, `weight`, `type`)
-//VALUES (':sku, ':name', ':price', :size, :height, :width, :length, :weight, ':type')")->execute();
-
-
+//        $stm->execute();
     }
 
     /**
