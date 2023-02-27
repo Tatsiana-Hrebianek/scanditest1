@@ -2,6 +2,7 @@ class Validator {
     errormessage = new Map();
     product = new Map();
     selector = document.getElementById("productType");
+    sku = document.querySelector('#sku');
 
     checkProductType() {
         if (this.selector.value) {
@@ -48,28 +49,30 @@ class Validator {
     // }
 
     checkSKU(inputname, errormessage) {
-        const data = new FormData(document.forms.product_form);
-        data.append('param', inputname);
-        data.append('error', errormessage);
-        let xhr = new XMLHttpRequest();
+        if (this.sku.value.length !== 0) {
+            const data = new FormData(document.forms.product_form);
+            data.append('param', inputname);
+            data.append('error', errormessage);
+            let xhr = new XMLHttpRequest();
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const obj = JSON.parse(xhr.response);
-                if (obj.error1 !== "ok") {
-                    this.errormessage.set(inputname, obj.error1);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const obj = JSON.parse(xhr.response);
+                    if (obj.error1 !== "ok") {
+                        this.errormessage.set(inputname, obj.error1);
+                    }
+
                 }
-
             }
-        }
 
-        xhr.open('POST', '/db', false);
-        //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-        xhr.send(data);
+            xhr.open('POST', '/checkSKU', false);
+            //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+            xhr.send(data);
+        }
     }
 
 
-    handle(errormessagesAfterCheckProductType, func) {
+    handle(errormessagesAfterCheckProductType) {
         console.log(this.errormessage);
         let spanName = document.querySelectorAll(".error");
         spanName.forEach((elem) => {
@@ -139,25 +142,31 @@ class Validator {
         }
     }
 
+    isValid() {
+        if (this.errormessage.size === 0) {
+            return true;
+        }
+    }
+
 
 }
 
 
-document.addEventListener("click", function (e) {
+document.addEventListener("submit", function (e) {
     let validator = new Validator();
 
     validator.isRequired("#sku", "Please enter SKU!");
-    validator.isAlphaNumeric("#sku", "SKU must be alpha number");
-    validator.hasMax("#sku", "SKU must be maximum 10 characters");
+    validator.isAlphaNumeric("#sku", "SKU should be alpha number");
+    validator.hasMax("#sku", "SKU should be maximum 10 characters");
 
     validator.isRequired("#name", "Please enter name!");
-    validator.isAlphaNumeric("#name", "Name must be alpha number");
-    validator.hasMax("#name", "Name must be maximum 10 characters");
+    validator.isAlphaNumeric("#name", "Name should be alpha number");
+    validator.hasMax("#name", "Name should be maximum 10 characters");
 
     validator.isRequired("#price", "Please enter price!");
     validator.isMin("#price", "Price should be at least 1$", 1);
     validator.isMax("#price", "Price should be maximum 1000$", 1000);
-    validator.isNumber("#price", "Please provide the data of indicated type");
+    //validator.isNumber("#price", "Please provide the data of indicated type");
 
     validator.isRequired("#productType", "Please choose product type!");
 
@@ -168,18 +177,18 @@ document.addEventListener("click", function (e) {
 
     validator.isRequired("#weight", "Please enter weight!");
     validator.isNumber("#weight", "Please provide the data of indicated type");
-    validator.isMax("#weight", "Value must be less than 1001", 1001);
-    validator.isMin("#weight", "Value must be greater than 0", 1);
+    validator.isMax("#weight", "Value should be less than 1001", 1001);
+    validator.isMin("#weight", "Value should be greater than 0", 1);
 
     validator.isRequired("#height", "Please enter height");
     validator.isNumber("#height", "Please provide the data of indicated type");
-    validator.isMin("#height", "Value must be greater than 0", 1);
+    validator.isMin("#height", "Value should be greater than 0", 1);
     validator.isRequired("#length", "Please enter length");
     validator.isNumber("#length", "Please provide the data of indicated type");
-    validator.isMin("#length", "Value must be greater than 0", 1);
+    validator.isMin("#length", "Value should be greater than 0", 1);
     validator.isRequired("#width", "Please enter width");
     validator.isNumber("#width", "Please provide the data of indicated type");
-    validator.isMin("#width", "Value must be greater than 0", 1);
+    validator.isMin("#width", "Value should be greater than 0", 1);
     validator.addProduct("Furniture", ["height", "width", "length"]);
     validator.addProduct("Book", ["weight"]);
     validator.addProduct("Disc", ["size"]);
@@ -187,7 +196,7 @@ document.addEventListener("click", function (e) {
     validator.handle(validator.checkProductType());
 
 
-    if (validator.errormessage.size === 0) {
+    if (validator.isValid()) {
         document.forms.product_form.onsubmit = (product_form) => {
             product_form.submit();
         }

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
-use App\Container;
 use App\Models\ProductsModel;
 use App\Controllers\Router;
 use PDO;
@@ -19,11 +20,20 @@ class CheckSKUController
     public function action()
     {
         header('Content-Type: application/json');
+        $inp = $_POST['param'];
+        $value = $_POST[$inp];
+        $error = $_POST['error'];
+//??? is DI supported for XHR requests
         $dbconnection = new PDO(DSN, NAME, PASSWORD);
-        $mes = (new ProductsModel($dbconnection))->checkSKU();
-        // $mes = $this->productsModel->checkSKU();
-        echo $mes;
+        $row = (new ProductsModel($dbconnection))->checkSKU($value);
+//        $row = $this->productsModel->checkSKU($value);
 
+        if ($value === $row["$inp"]) {
+            $mes = ['error1' => "$error"];
+        } else {
+            $mes = ['error1' => "ok"];
+        }
+        echo json_encode($mes);
 
     }
 }

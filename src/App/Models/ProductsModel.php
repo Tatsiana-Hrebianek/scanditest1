@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Products\Product;
@@ -111,36 +113,12 @@ class ProductsModel
         return $sth->fetchAll();
     }
 
-    /**
-     *
-     * @return void
-     */
-    public function checkSKU()
-    {
-        $inp = $_POST['param'];
-        $value = $_POST[$inp];
-        $error = $_POST['error'];
 
+    public function checkSKU($value)
+    {
         $query = "SELECT * FROM products WHERE sku='$value'";
         $sth = $this->getDBConnection()->prepare($query);
         $sth->execute();
-        $row = $sth->fetch();
-
-        if (!empty($value)) {
-
-            if ($value === $row["$inp"]) {
-                $mes = ['error1' => "$error"];
-            } else {
-                $mes = ['error1' => "ok"];
-            }
-            echo json_encode($mes);
-
-        } else {
-            $mes = ['error1' => "Please enter $inp!"];
-            echo json_encode($mes);
-
-        }
+        return $sth->fetch();
     }
-
-
 }
