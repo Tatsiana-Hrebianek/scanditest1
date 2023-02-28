@@ -8,6 +8,7 @@ use App\Controllers\DeleteProductsController;
 use App\Controllers\ShowErrorPageController;
 use App\Controllers\ShowProductFormController;
 use App\Controllers\ShowProductsController;
+use App\Controllers\Router;
 use App\Models\ProductsModel;
 use App\Products\Book;
 use App\Products\Disc;
@@ -21,9 +22,10 @@ $containerBuilder->register('TemplateComponent', TemplateComponent::class);
 $containerBuilder->setParameter('dsn', 'mysql:host=db;dbname=scandi;charset=utf8mb4');
 $containerBuilder->setParameter('name', 'root');
 $containerBuilder->setParameter('password', 'root');
+$containerBuilder->setParameter('attributes', [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
 $containerBuilder->register('connection', PDO::class)
     ->setArguments([
-        '%dsn%', '%name%', '%password%'
+        '%dsn%', '%name%', '%password%', '%attributes%'
     ]);
 $containerBuilder->register('ProductsModel', ProductsModel::class)
     ->addArgument(new DependencyInjection\Reference('connection'));
@@ -42,6 +44,8 @@ $containerBuilder->register('CheckSKUController', CheckSKUController::class)
     ->addArgument(new DependencyInjection\Reference('ProductsModel'));
 
 $containerBuilder->register('ShowErrorPageController', ShowErrorPageController::class);
+
+$containerBuilder->register('Router', Router::class);
 
 
 return $containerBuilder;

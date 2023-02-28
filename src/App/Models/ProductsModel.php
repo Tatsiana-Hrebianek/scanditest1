@@ -34,6 +34,7 @@ class ProductsModel
      */
     public function getProducts(): array
     {
+
         $query = "SELECT * FROM `products`";
         $sth = $this->getDBConnection()->prepare($query);
         $sth->execute();
@@ -47,18 +48,18 @@ class ProductsModel
      */
     public function addProduct(Product $product)
     {
-//        $stm = $this->getDBConnection()->prepare("INSERT INTO products ( sku, name, price, size, height, width, length, weight, type)
-//VALUES (:sku, :name, :price, :size, :height, :width, :length, :weight, :type)");
-//
-//        $stm->bindParam(':sku', $sku);
-//        $stm->bindParam(':name', $name);
-//        $stm->bindParam(':price', $price);
-//        $stm->bindParam(':size', $size);
-//        $stm->bindParam(':height', $height);
-//        $stm->bindParam(':width', $width);
-//        $stm->bindParam(':length', $length);
-//        $stm->bindParam(':weight', $weight);
-//        $stm->bindParam(':type', $type);
+        $stm = $this->getDBConnection()->prepare("INSERT INTO products ( sku, name, price, size, height, width, length, weight, type)
+VALUES (:sku, :name, :price, :size, :height, :width, :length, :weight, :type)");
+
+        $stm->bindParam(':sku', $sku);
+        $stm->bindParam(':name', $name);
+        $stm->bindParam(':price', $price);
+        $stm->bindParam(':size', $size);
+        $stm->bindParam(':height', $height);
+        $stm->bindParam(':width', $width);
+        $stm->bindParam(':length', $length);
+        $stm->bindParam(':weight', $weight);
+        $stm->bindParam(':type', $type);
 
         if (empty($this->isProductExists($product->getSKU()))) {
             $sku = $product->getSKU();
@@ -70,11 +71,13 @@ class ProductsModel
         $name = $product->getName();
         $price = $product->getPrice();
         $type = $product->getType();
-        $size = 'NULL';
-        $width = 'NULL';
-        $length = 'NULL';
-        $height = 'NULL';
-        $weight = 'NULL';
+        $size = 0;
+        //???
+//        $size = 'NULL';
+        $width = 0;
+        $length = 0;
+        $height = 0;
+        $weight = 0;
 
         if (method_exists($product, 'getWeight')) {
             $weight = $product->getWeight();
@@ -92,11 +95,7 @@ class ProductsModel
             $size = $product->getSize();
         }
 
-        $this->getDBConnection()->prepare("INSERT INTO `products` ( `sku`, `name`, `price`, `size`, `height`, `width`,
-                        `length`, `weight`, `type`) VALUES ('$sku', '$name', '$price', $size, $height, $width, $length, $weight, '$type')")->execute();
-
-
-//        $stm->execute();
+        $stm->execute();
     }
 
     /**
@@ -104,10 +103,16 @@ class ProductsModel
      */
     public function deleteProducts()
     {
-        $sku = $_POST['sku'];
-        if (count($sku)) {
-            $toString = "'" . implode("','", $sku) . "'";
-            $this->getDBConnection()->prepare("DELETE FROM `products` WHERE `sku` IN($toString)")->execute();
+        $skus = $_POST['sku'];
+        if (count($skus)) {
+            $placeholders = array_fill(0, count($skus), '?');
+            $toString = implode(',', $placeholders);
+            $stmt = $this->getDBConnection()->prepare("DELETE FROM products WHERE sku IN (" . $toString . ")");
+            $i = 1;
+            foreach ($skus as $sku) {
+                $stmt->bindValue($i++, $sku);
+            }
+            $stmt->execute();
         }
     }
 
@@ -117,18 +122,22 @@ class ProductsModel
      */
     public function isProductExists($sku): array
     {
-        $query = "SELECT * FROM `products` WHERE `sku` = '$sku'";
-        $sth = $this->getDBConnection()->prepare($query);
-        $sth->execute();
-        return $sth->fetchAll();
+        $stmt = $this->getDBConnection()->prepare("SELECT * FROM products WHERE sku = :sku");
+        $stmt->bindParam(':sku', $sku);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
 
-    public function checkSKU($value)
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function checkSKU($value): string
     {
-        $query = "SELECT * FROM products WHERE sku='$value'";
-        $sth = $this->getDBConnection()->prepare($query);
-        $sth->execute();
-        return $sth->fetch();
+        $stmt = $this->getDBConnection()->prepare("SELECT * FROM products WHERE sku = :sku");
+        $stmt->bindParam(':sku', $value);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 }
