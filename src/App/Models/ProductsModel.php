@@ -61,7 +61,7 @@ VALUES (:sku, :name, :price, :size, :height, :width, :length, :weight, :type)");
         $stm->bindParam(':weight', $weight);
         $stm->bindParam(':type', $type);
 
-        if (empty($this->isProductExists($product->getSKU()))) {
+        if (empty($this->checkSKU($product->getSKU()))) {
             $sku = $product->getSKU();
 
         } else {
@@ -117,27 +117,16 @@ VALUES (:sku, :name, :price, :size, :height, :width, :length, :weight, :type)");
     }
 
     /**
-     * @param $sku
-     * @return array
-     */
-    public function isProductExists($sku): array
-    {
-        $stmt = $this->getDBConnection()->prepare("SELECT * FROM products WHERE sku = :sku");
-        $stmt->bindParam(':sku', $sku);
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-
-    /**
      * @param $value
      * @return mixed
      */
-    public function checkSKU($value): string
+    public function checkSKU(string $value)//: array, bool
     {
-        $stmt = $this->getDBConnection()->prepare("SELECT * FROM products WHERE sku = :sku");
+        $stmt = $this->getDBConnection()->prepare("SELECT sku FROM products WHERE sku = :sku");
         $stmt->bindParam(':sku', $value);
         $stmt->execute();
-        return $stmt->fetch();
+        $row = $stmt->fetch();
+        return $row;
     }
+
 }

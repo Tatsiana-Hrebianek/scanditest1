@@ -48,23 +48,21 @@ class Validator {
     //     )
     // }
 
-    checkSKU(inputname, errormessage) {
+    checkSKU(inputname) {
         if (this.sku.value.length !== 0) {
             const data = new FormData(document.forms.product_form);
             data.append('param', inputname);
-            data.append('error', errormessage);
+            //data.append('error', errormessage);
             let xhr = new XMLHttpRequest();
-
             xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText !== "ok") {
+                    //console.log(xhr.responseText);
                     const obj = JSON.parse(xhr.response);
-                    if (obj.error1 !== "ok") {
+                    if (obj.error1 === "This SKU already exists, please enter another SKU") {
                         this.errormessage.set(inputname, obj.error1);
                     }
-
                 }
             }
-
             xhr.open('POST', '/checkSKU', false);
             //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
             xhr.send(data);
@@ -73,7 +71,6 @@ class Validator {
 
 
     handle(errormessagesAfterCheckProductType) {
-        console.log(this.errormessage);
         let spanName = document.querySelectorAll(".error");
         spanName.forEach((elem) => {
             elem.innerHTML = "";
@@ -192,7 +189,7 @@ document.addEventListener("submit", function (e) {
     validator.addProduct("Furniture", ["height", "width", "length"]);
     validator.addProduct("Book", ["weight"]);
     validator.addProduct("Disc", ["size"]);
-    validator.checkSKU("sku", "This SKU already exists, please enter another SKU");
+    validator.checkSKU("sku");
     validator.handle(validator.checkProductType());
 
 

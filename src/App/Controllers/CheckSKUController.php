@@ -10,22 +10,30 @@ use PDO;
 
 class CheckSKUController extends Controller
 {
+    private $productsModel;
+
+    public function __construct(ProductsModel $productsModel)
+    {
+        $this->productsModel = $productsModel;
+    }
+
     public function action()
     {
-        header('Content-Type: application/json');
-        $container = include __DIR__ . '/../container.php';
         $inp = $_POST['param'];
         $value = $_POST[$inp];
-        $error = $_POST['error'];
-        $row = $container->get('ProductsModel')->checkSKU($value);
-        if ($value === $row["$inp"]) {
-            $mes = ['error1' => "$error"];
+        $row = $this->productsModel->checkSKU($value);
+        if ($row !== null & $row !== FALSE) {
+            if ($value === $row["$inp"]) {
+                $message = ['error1' => "This SKU already exists, please enter another SKU"];
+            }
         } else {
-            $mes = ['error1' => "ok"];
+            $message = ['error1' => "ok"];
         }
-        echo json_encode($mes);
-
+        header('Content-Type: application/json');
+        echo json_encode($message);
     }
+
+
 }
 
 
