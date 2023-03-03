@@ -23,9 +23,7 @@ class CheckSKUController extends Controller
         $value = $_POST[$inp];
         $row = $this->productsModel->checkSKU($value);
         if ($row !== null & $row !== FALSE) {
-            if ($value === $row["$inp"]) {
-                $message = ['error1' => "This SKU already exists, please enter another SKU"];
-            }
+            $message = ['error1' => "This SKU already exists, please enter another SKU"];
         } else {
             $message = ['error1' => "ok"];
         }
